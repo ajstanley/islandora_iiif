@@ -303,7 +303,7 @@ class IIIFManifest extends StylePluginBase {
             }
           }
 
-          $items[] = [
+          $iiif_item = [
             'id' => $item_id,
             'type' => 'Canvas',
             'height' => $height,
@@ -329,14 +329,18 @@ class IIIFManifest extends StylePluginBase {
                 ],
               ],
             ],
-            'annotations' => [
+          ];
+          $transcriptions = $this->getTranscripts($this->entity, $item_id);
+          if ($transcriptions) {
+            $iiif_item['annotations'] = [
               0 => [
                 'id' => "$item_id/annopage-2",
                 'type' => 'AnnotationPage',
                 'items' => $this->getTranscripts($this->entity, $item_id),
               ],
-            ],
-          ];
+            ];
+          }
+          $items[] = $iiif_item;
         }
       }
     }
