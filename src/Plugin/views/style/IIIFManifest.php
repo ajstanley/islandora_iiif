@@ -347,27 +347,21 @@ class IIIFManifest extends StylePluginBase {
 
     return $items;
   }
-
   public function getTranscripts($entity, $item_id) {
     $transcripts = NULL;
     $annotations = NULL;
-    $transcript_term = reset($this->entityTypeManager->getStorage('taxonomy_term')
-      ->loadByProperties(['name' => 'transcript']));
     $media = $this->utils->getMedia($entity);
-    if ($media) {
-      $transcripts = array_filter(array_map(function ($item) use ($transcript_term) {
-        if ($item->get('field_media_use')->target_id == $transcript_term->id()) {
-          return $item;
+    foreach ($media as $medium){
+      if ($medium->bundle() == "extracted_text") {
+        $text = $medium->get('field_edited_text')->value;
+        if ($text){
+          $transcripts[] = $medium->get('field_edited_text')->value;
         }
-      }, $media));
+      }
     }
 
     if ($transcripts) {
       foreach ($transcripts as &$transcript) {
-        $fid = $transcript->getSource()->getSourceFieldValue($transcript);
-        $file = File::load($fid);
-        // Flysystem needs absolute URL.
-        $url = $file->createFileUrl(FALSE);
         $annotations[] = [
           'id' => "$item_id/annopage-2/anno-1",
           'type' => 'Annotation',
@@ -376,17 +370,16 @@ class IIIFManifest extends StylePluginBase {
             'type' => 'TextualBody',
             'language' => 'en',
             'format' => 'text/plain',
-            'value' => \file_get_contents($url),
+            'value' => $transcript,
           ],
           'target' => $item_id,
         ];
       }
     }
 
-
     return $annotations;
-
   }
+
 
   public function getEntity(string $content_path) {
     $entity = NULL;
