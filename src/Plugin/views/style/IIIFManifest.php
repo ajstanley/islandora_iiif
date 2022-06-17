@@ -215,7 +215,7 @@ class IIIFManifest extends StylePluginBase {
           ],
           'value' => [
             'en' => [
-              0 => 'Vassar Digital Libraries, all Rights reserved',
+              0 => 'These materials are made available for research and educational purposes.  It is the responsibility of the researcher to determine the copyright status of materials in the Vassar College Digital Library',
             ],
           ],
         ],
