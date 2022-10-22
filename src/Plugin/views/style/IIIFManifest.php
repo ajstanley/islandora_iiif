@@ -225,9 +225,10 @@ class IIIFManifest extends StylePluginBase {
         'metadata' => $metadata,
       ];
       // For each row in the View result.
+      $this->hasTranscriptions = FALSE;
       foreach ($this->view->result as $row) {
         // Add the IIIF URL to the image to print out as JSON.
-        $items = $this->getTileSourceFromRow($row, $iiif_address, $iiif_base_id);
+        $items = $this->getTileSourceFromRow($row, $iiif_address, $iiif_base_id, );
         foreach ($items as $tile_source) {
           $json['items'][] = $tile_source;
         }
@@ -331,7 +332,7 @@ class IIIFManifest extends StylePluginBase {
             ],
           ];
           $transcriptions = $this->getTranscripts($this->entity, $item_id);
-          if ($transcriptions) {
+          if ($transcriptions &! $this->hasTranscriptions) {
             $iiif_item['annotations'] = [
               0 => [
                 'id' => "$item_id/annopage-2",
@@ -340,6 +341,7 @@ class IIIFManifest extends StylePluginBase {
               ],
             ];
           }
+          $this->hasTranscriptions = TRUE;
           $items[] = $iiif_item;
         }
       }
