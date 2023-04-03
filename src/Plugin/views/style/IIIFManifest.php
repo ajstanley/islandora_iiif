@@ -171,10 +171,13 @@ class IIIFManifest extends StylePluginBase {
         if ($this->entity->hasField($field)) {
           $value = reset($this->entity->get($field)->getValue()[0]);
           $target = $this->entity->get($field)->target_id;
-          if ($target) {
-            $value = Term::load($target)->get('name')->value;
-          }
-          if ($value) {
+          if ($target) {                             
+            $term = Term::load($target);                     
+             if ($term) {                              
+                 $value = $term->get('name')->value;
+              }                        
+          }                            
+          if ($value) { 
             //$value = $value['value'];
             $metadata[] = [
               'label' => [
