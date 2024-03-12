@@ -335,7 +335,7 @@ class IIIFManifest extends StylePluginBase {
             ],
           ];
           $transcriptions = $this->getTranscripts($this->entity, $item_id);
-          if ($transcriptions &! $this->hasTranscriptions) {
+          if ($transcriptions && !$this->hasTranscriptions) {
             $iiif_item['annotations'] = [
               0 => [
                 'id' => "$item_id/annopage-2",
