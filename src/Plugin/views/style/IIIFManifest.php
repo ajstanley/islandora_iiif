@@ -167,34 +167,37 @@ class IIIFManifest extends StylePluginBase {
       $this->entity = $this->getEntity($content_path);
       // Create metadata
       $metadata = [];
-      foreach ($metadata_mappings as $mapping => $field) {
-        if ($this->entity->hasField($field)) {
-          $value = reset($this->entity->get($field)->getValue()[0]);
-          $target = $this->entity->get($field)->target_id;
-          if ($target) {                             
-            $term = Term::load($target);                     
-             if ($term) {                              
-                 $value = $term->get('name')->value;
-              }                        
-          }                            
-          if ($value) { 
-            //$value = $value['value'];
-            $metadata[] = [
-              'label' => [
-                'en' => [
-                  0 => $mapping,
-                ],
-              ],
-              'value' => [
-                'en' => [
-                  0 => $value,
-                ],
-              ],
-            ];
-          }
-        }
+      $value = FALSE;
+      foreach ($metadata_mappings as $mapping => $field) {              
+        if ($this->entity->hasField($field)) {                          
+          $values = $this->entity->get($field)->getValue();             
+          if ($values) {                                                
+            $value = reset($values);                                    
+          }                                                             
+         # $value = reset($this->entity->get($field)->getValue()[0]);   
+          $target = $this->entity->get($field)->target_id;              
+          if ($target) {                                                
+            $term = Term::load($target);                              
+             if ($term) {                                            
+                 $value = $term->get('name')->value;                 
+              }                                                      
+          }                                                          
+          if ($value) {                                                                     
+            $metadata[] = [                                          
+              'label' => [                                           
+                'en' => [                                            
+                  0 => $mapping,                                     
+                ],                                                   
+              ],                                                     
+              'value' => [                                           
+                'en' => [                                            
+                  0 => $value,                                       
+                ],                                        
+              ],                                    
+            ];                                      
+          }                                         
+        }                                           
       }
-
 
       // @see https://iiif.io/api/presentation/3/#manifest
       $json += [
