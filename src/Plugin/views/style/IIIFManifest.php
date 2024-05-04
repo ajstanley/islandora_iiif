@@ -100,6 +100,13 @@ class IIIFManifest extends StylePluginBase {
    * @var \Drupal\Core\File\FileSystem
    */
   protected $fileSystem;
+  
+   /**
+   * The Guzzle HTTP Client.
+   *
+   * @var \GuzzleHttp\Client
+   */
+  protected $httpClient;
 
   /**
    * The messenger.
